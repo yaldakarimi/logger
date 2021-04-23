@@ -1,16 +1,14 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect } from "react";
+import { fetchLogs } from "../../redux/slice/logsReducer";
+import { useDispatch, useSelector } from "react-redux";
 import LogItem from "./LogItem";
 
 const Logs = () => {
-  const [logs, setLogs] = useState([]);
+  const dispatch = useDispatch();
+  const logs = useSelector((state) => state.logs.items);
   useEffect(() => {
-    const getLogs = async () => {
-      const res = await axios.get("/logs");
-      setLogs(res.data);
-    };
-    getLogs();
-  }, []);
+    dispatch(fetchLogs());
+  }, [dispatch]);
 
   return (
     <div className='container'>
@@ -18,6 +16,7 @@ const Logs = () => {
         <li className='collection-header'>
           <h3 className='center'>System Logs</h3>
         </li>
+
         {logs.length === 0 ? (
           <p className='center'>No Logs to show...</p>
         ) : (
