@@ -1,0 +1,20 @@
+{
+  "extends": ["airbnb", "prettier"],
+  "plugins": ["prettier", "react-hooks"],
+  "rules": {
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "no-unused-vars": "off",
+    "no-console": "off",
+    "import/extensions": "off",
+    "jsx-a11y/label-has-associated-control": "off",
+    "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+    "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
+    "react/react-in-jsx-scope": "off",
+    "arrow-body-style": "warn",
+    "no-param-reassign": "off",
+    "object-shorthand": "off",
+    "react/forbid-prop-types": "off",
+    "react/prop-types": "off",
+    "no-debugger": "off"
+  }
+}
