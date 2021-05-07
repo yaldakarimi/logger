@@ -9,6 +9,7 @@ const initialState = {
   addError: null,
   deleteError: null,
   updateError: null,
+  searchError: null,
 };
 
 export const fetchLogs = createAsyncThunk('logs/fetchLogs', async () => {
@@ -30,6 +31,15 @@ export const updateLog = createAsyncThunk('logs/updateLog', async (log) => {
   const res = await axios.put(`/logs/${log.id}`, log);
   return res.data;
 });
+
+export const searchLogs = createAsyncThunk(
+  'logs/searchLogs',
+  async (searchInput) => {
+    const res = await axios.get(`/logs?q=${searchInput}`);
+
+    return res.data;
+  }
+);
 
 const logsSlice = createSlice({
   name: 'logs',
@@ -85,6 +95,15 @@ const logsSlice = createSlice({
 
     [updateLog.rejected]: (state, action) => {
       state.updateError = action.error.payload;
+    },
+
+    // Search Logs
+    [searchLogs.fulfilled]: (state, action) => {
+      state.items = action.payload;
+    },
+
+    [searchLogs.rejected]: (state, action) => {
+      state.searchError = action.error.message;
     },
   },
 });
