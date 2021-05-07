@@ -1,14 +1,14 @@
-import { useEffect, Fragment } from "react";
-import "./App.css";
-import "materialize-css/dist/css/materialize.min.css";
-import M from "materialize-css/dist/js/materialize.min.js";
-import SearchBar from "./components/layout/SearchBar";
-import Logs from "./components/Logs/Logs";
-import AddBtn from "./components/layout/AddBtn";
-import AddLogModal from "./components/Logs/AddLogModal";
-import EditLogModal from "./components/Logs/EditLogModal";
-import AddTechModal from "./components/Techs/AddTechModal";
-import TechListModal from "./components/Techs/TechListModal";
+import { useEffect } from 'react';
+import './App.css';
+import 'materialize-css/dist/css/materialize.min.css';
+import M from 'materialize-css/dist/js/materialize.min.js';
+import SearchBar from './components/layout/SearchBar';
+import Logs from './components/Logs/Logs';
+import AddBtn from './components/layout/AddBtn';
+import AddLogModal from './components/Logs/AddLogModal';
+import EditLogModal from './components/Logs/EditLogModal';
+import AddTechModal from './components/Techs/AddTechModal';
+import TechListModal from './components/Techs/TechListModal';
 
 const App = () => {
   useEffect(() => {
@@ -16,7 +16,7 @@ const App = () => {
     M.AutoInit();
   });
   return (
-    <Fragment>
+    <>
       <SearchBar />
       <Logs />
       <AddBtn />
@@ -24,7 +24,7 @@ const App = () => {
       <EditLogModal />
       <AddTechModal />
       <TechListModal />
-    </Fragment>
+    </>
   );
 };
 
