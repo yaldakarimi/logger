@@ -1,23 +1,46 @@
-import { useState } from "react";
-import M from "materialize-css/dist/js/materialize.min.js";
+import React, { useState, useEffect } from 'react';
+import M from 'materialize-css/dist/js/materialize.min.js';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateLog, clearCurrent } from '../../redux/slice/logsReducer';
 
 const EditLogModal = () => {
   const modalStyle = {
-    width: "75%",
-    height: "75%",
+    width: '75%',
+    height: '75%',
   };
-  const [message, setMessage] = useState("");
-  const [tech, setTech] = useState("");
+  const dispatch = useDispatch();
+  const currentLog = useSelector((state) => state.logs.current);
+
+  const [message, setMessage] = useState('');
+  const [tech, setTech] = useState('');
   const [attention, setAttention] = useState(false);
+
+  useEffect(() => {
+    if (currentLog) {
+      setMessage(currentLog.message);
+      setTech(currentLog.tech);
+      setAttention(currentLog.attention);
+    }
+  }, [currentLog]);
 
   const onEdit = (e) => {
     e.preventDefault();
-    if (message === "" || tech === "") {
-      M.toast({ html: "Write a message and select a technician please" });
+    if (message === '' || tech === '') {
+      M.toast({ html: 'Write a message and select a technician please' });
     } else {
-      console.log("edited");
-      setTech("");
-      setMessage("");
+      const updatedLog = {
+        id: currentLog.id, // important point to remember
+        message,
+        tech,
+        date: new Date(),
+        attention,
+      };
+
+      dispatch(updateLog(updatedLog));
+      M.toast({ html: `Log updated by ${tech}` });
+      dispatch(clearCurrent());
+      setTech('');
+      setMessage('');
       setAttention(false);
     }
   };
@@ -34,7 +57,6 @@ const EditLogModal = () => {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
             />
-            <label htmlFor='message'>Edit Message</label>
           </div>
         </div>
 
@@ -44,6 +66,7 @@ const EditLogModal = () => {
               name='tech'
               value={tech}
               onChange={(e) => setTech(e.target.value)}
+              className='browser-default'
             >
               <option value=''> Select Technician</option>
               <option value='John Doe'>John Doe</option>
@@ -59,6 +82,7 @@ const EditLogModal = () => {
               <input
                 type='checkbox'
                 className='filled-in'
+                checked={attention}
                 value={attention}
                 onChange={() => setAttention(!attention)}
               />
@@ -75,7 +99,7 @@ const EditLogModal = () => {
               onClick={onEdit}
               href='#!'
               className='modal-close waves-effect waves-light btn deep-purple accent-2 '
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
             >
               Edit
             </a>
