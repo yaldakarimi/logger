@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import M from 'materialize-css/dist/js/materialize.min.js';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateLog, clearCurrent } from '../../redux/slice/logsReducer';
+import { fetchTechs } from '../../redux/slice/techsReducer';
 
 const EditLogModal = () => {
   const modalStyle = {
@@ -9,6 +10,13 @@ const EditLogModal = () => {
     height: '75%',
   };
   const dispatch = useDispatch();
+  const techStatus = useSelector((state) => state.techs.status);
+
+  if (techStatus === 'idle') {
+    dispatch(fetchTechs);
+  }
+
+  const techs = useSelector((state) => state.techs.items);
   const currentLog = useSelector((state) => state.logs.current);
 
   const [message, setMessage] = useState('');
@@ -68,10 +76,18 @@ const EditLogModal = () => {
               onChange={(e) => setTech(e.target.value)}
               className='browser-default'
             >
-              <option value=''> Select Technician</option>
-              <option value='John Doe'>John Doe</option>
-              <option value='Sam Smith'>Sam Smith</option>
-              <option value='Sara Wilson'>Sara Wilson</option>
+              <option value='' disabled>
+                Select Technician
+              </option>
+              {techs &&
+                techs.map((item) => (
+                  <option
+                    key={item.id}
+                    value={`${item.firstName} ${item.lastName}`}
+                  >
+                    {item.firstName} {item.lastName}
+                  </option>
+                ))}
             </select>
           </div>
         </div>

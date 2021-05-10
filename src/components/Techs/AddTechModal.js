@@ -1,17 +1,27 @@
-import { useState } from "react";
-import M from "materialize-css/dist/js/materialize.min.js";
+import { useState } from 'react';
+import M from 'materialize-css/dist/js/materialize.min.js';
+import { useDispatch } from 'react-redux';
+import { addTech } from '../../redux/slice/techsReducer';
+
 const AddTechModal = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+
+  const dispatch = useDispatch();
 
   const addHandler = (e) => {
     e.preventDefault();
-    if (firstName === "" || lastName === "") {
-      M.toast({ html: "Please enter a first name and a last name" });
+    if (firstName === '' || lastName === '') {
+      M.toast({ html: 'Please enter a first name and a last name' });
     } else {
-      console.log(firstName, lastName);
-      setFirstName("");
-      setLastName("");
+      const newTech = {
+        firstName,
+        lastName,
+      };
+      dispatch(addTech(newTech));
+      M.toast({ html: `${firstName} ${lastName} was added as a technician` });
+      setFirstName('');
+      setLastName('');
     }
   };
 
@@ -48,6 +58,7 @@ const AddTechModal = () => {
             href='#!'
             className='modal-close waves-effect waves-light btn deep-purple accent-2 '
             onClick={addHandler}
+            style={{ width: '100%' }}
           >
             Add
           </a>

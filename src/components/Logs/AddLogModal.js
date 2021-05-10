@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import M from 'materialize-css/dist/js/materialize.min.js';
 import { addLog } from '../../redux/slice/logsReducer';
+import { fetchTechs } from '../../redux/slice/techsReducer';
 
 const AddLogModal = () => {
   const modalStyle = {
@@ -9,6 +10,14 @@ const AddLogModal = () => {
     height: '75%',
   };
   const dispatch = useDispatch();
+
+  const techStatus = useSelector((state) => state.techs.status);
+
+  if (techStatus === 'idle') {
+    dispatch(fetchTechs);
+  }
+  const techs = useSelector((state) => state.techs.items);
+
   const [message, setMessage] = useState('');
   const [tech, setTech] = useState('');
   const [attention, setAttention] = useState(false);
@@ -43,12 +52,12 @@ const AddLogModal = () => {
             <i className='material-icons prefix'>mode_edit</i>
             <input
               type='text'
-              id='message'
+              id='addMessage'
               name='message'
               value={message}
               onChange={(e) => setMessage(e.target.value)}
             />
-            <label htmlFor='message' className='active'>
+            <label htmlFor='addMessage' className='active'>
               Log Message
             </label>
           </div>
@@ -65,9 +74,16 @@ const AddLogModal = () => {
               <option value='' disabled>
                 Select Technician
               </option>
-              <option value='John Doe'>John Doe</option>
-              <option value='Sam Smith'>Sam Smith</option>
-              <option value='Sara Wilson'>Sara Wilson</option>
+
+              {techs &&
+                techs.map((item) => (
+                  <option
+                    key={item.id}
+                    value={`${item.firstName} ${item.lastName}`}
+                  >
+                    {item.firstName} {item.lastName}
+                  </option>
+                ))}
             </select>
           </div>
         </div>
